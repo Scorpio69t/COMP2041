@@ -21,6 +21,7 @@ if [ "$1" -ge 2019 ] && [ "$1" -le 2023 ] && [ "$1" -eq "$1" ]
 then
     ( curl -sL "$URL1" | jq -j '.contentlets[] | .code, " ", .title, "\n"' ;
     curl -sL "$URL2" | jq -j '.contentlets[] | .code, " ", .title, "\n"' ) |
+    tr -s ' ' | 
     sort -t' ' -k1 -n | uniq
     
 else
