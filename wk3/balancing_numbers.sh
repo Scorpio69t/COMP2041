@@ -1,6 +1,3 @@
 #!/bin/dash
 
-while read CMD 
-do
-    "$CMD" >> tmp.txt
-done
+tr '012346789'  "<<<<<>>>>" 
