@@ -7,18 +7,24 @@ URL2="https://www.handbook.unsw.edu.au/api/content/render/false/query/+unsw_psub
 
 if [ "$#" -ne 2 ]
 then
-    echo "Usage: $0 <year> <course-prefix>"
+    echo "Usage: $0 <year> <course-prefix>" 2>&1
     exit 1
 fi
 
-if [ "$1" -ge 2019 ] && [ "$1" -le 2023 ]
+if ! [ "$1" -eq "$1" ] 2> /dev/null
+then
+    echo "$0: argument 1 must be an integer between 2019 and 2023" 
+    exit 1
+fi
+
+if [ "$1" -ge 2019 ] && [ "$1" -le 2023 ] && [ "$1" -eq "$1" ]
 then
     ( curl -sL "$URL1" | jq -j '.contentlets[] | .code, " ", .title, "\n"' ;
     curl -sL "$URL2" | jq -j '.contentlets[] | .code, " ", .title, "\n"' ) |
     sort -t' ' -k1 -n | uniq
     
 else
-    echo "$0: argument 1 must be an integer between 2019 and 2023"
+    echo "$0: argument 1 must be an integer between 2019 and 2023" 
     exit 1
 fi
 
