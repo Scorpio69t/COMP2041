@@ -7,7 +7,7 @@ do
     read email
     if [ "$email" = "" ] 
     then
-        echo No email sent
+        echo "\nNo email sent"
         continue
     fi
     echo -n "Message to accompany image? "
