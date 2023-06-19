@@ -2,6 +2,6 @@
 
 for file_name in * 
 do
-    newfile="$(echo "$file_name")"
-    echo "$newfile"
+    echo "$file_name"
+    
 done
