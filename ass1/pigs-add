@@ -1,0 +1,6 @@
+#!/bin/dash
+
+for file in "$@"
+do
+    cp "$file" .pigs/index
+done

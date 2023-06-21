@@ -7,4 +7,6 @@ then
 fi
 
 mkdir .pig
+mkdir .pig/index
+mkdir .pig/commits
 echo "Initialized empty pigs repository in .pig"
