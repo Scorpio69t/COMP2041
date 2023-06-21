@@ -16,7 +16,7 @@ mkdir .pig/commits/"$CommitNum"
 
 for file in .pig/index/*
 do
-    .commitdif.sh "$file"
+    ./commitdif.sh "$file"
     if [ $? -eq 1 ] 
     then
         echo "nothing to commit" 1>&2
