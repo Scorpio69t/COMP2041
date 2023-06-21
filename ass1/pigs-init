@@ -2,7 +2,7 @@
 
 if test -d .pig 
 then
-    echo "./pigs-init: error: .pig already exists" 1>&2
+    echo "pigs-init: error: .pig already exists" 1>&2
     exit 1
 fi
 
