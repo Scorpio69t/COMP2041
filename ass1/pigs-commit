@@ -1,13 +1,24 @@
 #!/bin/dash
-
+#Gets the commit number.
 CommitNum=0
-cd .pig/commits
-for file in *
+for file in .pig/commits/*
 do
-    if [ -f "$file" ]
+    if [ -d "$file" ]
     then
         CommitNum=$((CommitNum + 1))
     fi
 done
+#Create new directory with name, CommitNum
+mkdir .pig/commits/"$CommitNum"
 
-echo "$CommitNum"
+#move files from index to new dir
+
+for file in .pig/index/*
+do
+    mv "$file" .pig/commits/"$CommitNum"
+done
+
+#create new file inside dir for message
+
+echo "$2" > .pig/commits/"$CommitNum"/message.txt
+echo "Committed as commit $CommitNum"
