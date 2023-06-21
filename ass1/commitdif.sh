@@ -9,16 +9,13 @@ ArgCutName="$(echo $1 | cut -d'/' -f3)"
 base=$(pwd)
 for dir in .pig/commits/*
 do
-    cd $dir
-    for file in *
+    CommitNum="$(echo $dir | cut -d'/' -f3)"
+    for file in .pig/commits/$CommitNum/*
     do
-        echo "FILE is $file"
-        echo "Arguement is $1"
-        if [ "$file" = "$ArgCutName" ]
+        fileCutName="$(echo $file | cut -d'/' -f4)"
+        if [ "$fileCutName" = "$ArgCutName" ]
         then
-            echo 'srthjio4r'
-            echo $file
-            diff -q "$file" "$1"
+            diff -q "$file" "$1" >/dev/null
             if [ $? -eq 0 ]
             then
                 exit 1
