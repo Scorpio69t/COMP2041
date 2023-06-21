@@ -8,9 +8,24 @@ do
         CommitNum=$((CommitNum + 1))
     fi
 done
+
+#check if change was made to files
+
 #Create new directory with name, CommitNum
 mkdir .pig/commits/"$CommitNum"
 
+for file in .pig/index/*
+do
+    echo $file
+    # file="$(echo $file | cut -d'/' -f3)"
+    ./commitdif.sh "$file"
+    if [ $? -eq 1 ] 
+    then
+        echo "nothing to commit" 1>&2
+        rm -r .pig/commits/"$CommitNum"
+        exit 1
+    fi 
+done
 #move files from index to new dir
 
 for file in .pig/index/*
