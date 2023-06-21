@@ -1,0 +1,13 @@
+#!/bin/dash
+
+CommitNum=0
+cd .pig/commits
+for file in *
+do
+    if [ -f "$file" ]
+    then
+        CommitNum=$((CommitNum + 1))
+    fi
+done
+
+echo "$CommitNum"
