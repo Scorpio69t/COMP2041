@@ -2,7 +2,6 @@
 
 for dir in .pig/commits/*
 do
-    # echo $dir
     CommitNum="$(echo $dir | cut -d'/' -f3)"
     CommitMsg="$(cat .pig/commits/$CommitNum/message.txt)"
     echo "$CommitNum $CommitMsg" >> tmp.txt

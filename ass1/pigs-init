@@ -1,5 +1,5 @@
 #!/bin/dash
-
+#Test if .pig already exists
 if test -d .pig 
 then
     echo "$0: error: .pig already exists" 1>&2

@@ -1,27 +1,24 @@
 #!/bin/dash
 
-#arguement will be a file
-#loop through dir in .pig/commits
-#if file in dir == arguement
-#call diff. If diff returns w exit 1, we exit 1
-#else exit 0
+#This script, given a file as an arguement, will go through all comits
+#and see if the file hhas been changed.
+
 ArgCutName="$(echo $1 | cut -d'/' -f3)"
-base=$(pwd)
+#Loop through all commits
 for dir in .pig/commits/*
 do
     CommitNum="$(echo $dir | cut -d'/' -f3)"
-    for file in .pig/commits/$CommitNum/*
+    for file in .pig/commits/$CommitNum/*       #loop through files in each commit
     do
         fileCutName="$(echo $file | cut -d'/' -f4)"
         if [ "$fileCutName" = "$ArgCutName" ]
-        then
+        then                 #If a commit contains a file with same name as arguement, will call diff on both
             diff -q "$file" "$1" >/dev/null
             if [ $? -eq 0 ]
             then
-                exit 1
+                exit 1      #Exit with code 1 if there is no change
             fi
         fi
     done
-    cd "$base"
 done
 exit 0

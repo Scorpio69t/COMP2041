@@ -9,11 +9,10 @@ do
     fi
 done
 
-#check if change was made to files
-
 #Create new directory with name, CommitNum
 mkdir .pig/commits/"$CommitNum"
 
+#check if files to be commited have been changed.
 for file in .pig/index/*
 do
     commitdif.sh "$file"
@@ -24,14 +23,13 @@ do
         exit 1
     fi 
 done
-#move files from index to new dir
 
+#move files from index to new dir
 for file in .pig/index/*
 do
     mv "$file" .pig/commits/"$CommitNum"
 done
 
 #create new file inside dir for message
-
 echo "$2" > .pig/commits/"$CommitNum"/message.txt
 echo "Committed as commit $CommitNum"
