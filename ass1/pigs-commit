@@ -15,7 +15,7 @@ mkdir .pig/commits/"$CommitNum"
 #check if files to be commited have been changed.
 for file in .pig/tmpIndex/*
 do
-    ./commitdif.sh "$file"
+    commitdif.sh "$file"
     if [ $? -eq 1 ] 
     then
         echo "$file has nothing to commit"
