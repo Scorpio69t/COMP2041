@@ -18,7 +18,6 @@ do
     commitdif.sh "$file"
     if [ $? -eq 1 ] 
     then
-        echo "$file has nothing to commit"
         echo "nothing to commit" 1>&2
         rm -r .pig/commits/"$CommitNum"
         exit 1

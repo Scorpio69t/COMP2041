@@ -15,6 +15,15 @@ then
             exit 0
         fi
     done
+    for file in .pig/tmpIndex/*
+    do
+        fileCutName="$(echo $file | cut -d'/' -f3)"   
+        if [ "$fileCutName" = "$FileName" ]
+        then
+            cat "$file"
+            exit 0
+        fi
+    done
     echo "$0: error: '$FileName' not found in index" 1>&2
     exit 1
 fi
