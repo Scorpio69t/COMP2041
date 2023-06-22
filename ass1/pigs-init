@@ -9,4 +9,5 @@ fi
 mkdir .pig
 mkdir .pig/index
 mkdir .pig/commits
+mkdir .pig/tmpIndex
 echo "Initialized empty pigs repository in .pig"

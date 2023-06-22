@@ -34,6 +34,6 @@ do
         cat .pig/commits/$CommitNum/$FileName
         exit 0
     fi
+done
     echo "$0: error: unknown commit '$CommitNum'" 1>&2
     exit 1
-done

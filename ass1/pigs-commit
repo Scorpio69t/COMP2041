@@ -13,15 +13,17 @@ done
 mkdir .pig/commits/"$CommitNum"
 
 #check if files to be commited have been changed.
-for file in .pig/index/*
+for file in .pig/tmpIndex/*
 do
-    commitdif.sh "$file"
+    ./commitdif.sh "$file"
     if [ $? -eq 1 ] 
     then
+        echo "$file has nothing to commit"
         echo "nothing to commit" 1>&2
         rm -r .pig/commits/"$CommitNum"
         exit 1
-    fi 
+    fi
+    mv "$file" .pig/index
 done
 
 #copies files from index to new dir
