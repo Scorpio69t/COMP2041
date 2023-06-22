@@ -12,10 +12,11 @@ then
         if [ "$fileCutName" = "$FileName" ]
         then
             cat "$file"
+            exit 0
         fi
-        exit 0
     done
     echo "error: '$FileName' not found in index" 1>&2
+    exit 1
 fi
 
 #Commit Num is included
@@ -28,9 +29,11 @@ do
         if [ ! -f  "$ShowFile" ]
         then
             echo "error: $FileName not found in commit $CommitNum" 1>&2
+            exit 1
         fi
         cat .pig/commits/$CommitNum/$FileName
         exit 0
     fi
     echo "error: unknown commit '$CommitNum'" 1>&2
+    exit 1
 done
