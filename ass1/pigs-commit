@@ -24,10 +24,10 @@ do
     fi 
 done
 
-#move files from index to new dir
+#copies files from index to new dir
 for file in .pig/index/*
 do
-    mv "$file" .pig/commits/"$CommitNum"
+    cp "$file" .pig/commits/"$CommitNum"
 done
 
 #create new file inside dir for message
