@@ -15,7 +15,7 @@ then
             exit 0
         fi
     done
-    echo "error: '$FileName' not found in index" 1>&2
+    echo "$0: error: '$FileName' not found in index" 1>&2
     exit 1
 fi
 
@@ -28,12 +28,12 @@ do
         ShowFile=.pig/commits/"$CommitNum"/"$FileName"
         if [ ! -f  "$ShowFile" ]
         then
-            echo "error: $FileName not found in commit $CommitNum" 1>&2
+            echo "$0: error: $FileName not found in commit $CommitNum" 1>&2
             exit 1
         fi
         cat .pig/commits/$CommitNum/$FileName
         exit 0
     fi
-    echo "error: unknown commit '$CommitNum'" 1>&2
+    echo "$0: error: unknown commit '$CommitNum'" 1>&2
     exit 1
 done
