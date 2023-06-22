@@ -28,7 +28,7 @@ do
         ShowFile=.pig/commits/"$CommitNum"/"$FileName"
         if [ ! -f  "$ShowFile" ]
         then
-            echo "$0: error: $FileName not found in commit $CommitNum" 1>&2
+            echo "$0: error: '$FileName' not found in commit $CommitNum" 1>&2
             exit 1
         fi
         cat .pig/commits/$CommitNum/$FileName
