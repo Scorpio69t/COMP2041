@@ -1,0 +1,29 @@
+#!/bin/dash
+# Gets the commit num and file name into variables
+CommitNum="$(echo $1 | cut -d\: -f1)"
+FileName="$(echo $1 | cut -d\: -f2)"
+
+#If commit Number is ommited 
+if [ -z "$CommitNum" ]
+then
+    for file in .pig/index/*
+    do
+        fileCutName="$(echo $file | cut -d'/' -f3)"   
+        if [ "$fileCutName" = "$FileName" ]
+        then
+            cat "$file"
+        fi
+        exit 0
+    done
+fi
+
+#Commit Num is included
+for dir in .pig/commits/*
+do
+    dirNum="$(echo $dir | cut -d'/' -f3)"
+    if [ "$dirNum" = "$CommitNum" ]
+    then
+        cat .pig/commits/$CommitNum/$FileName
+        exit 0
+    fi
+done
