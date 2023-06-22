@@ -6,7 +6,7 @@ FileName="$(echo $1 | cut -d\: -f2)"
 #If commit Number is ommited 
 if [ -z "$CommitNum" ]
 then
-    for file in .pig/index/*
+    for file in .pig/tmpIndex/*
     do
         fileCutName="$(echo $file | cut -d'/' -f3)"   
         if [ "$fileCutName" = "$FileName" ]
@@ -15,7 +15,7 @@ then
             exit 0
         fi
     done
-    for file in .pig/tmpIndex/*
+    for file in .pig/index/*
     do
         fileCutName="$(echo $file | cut -d'/' -f3)"   
         if [ "$fileCutName" = "$FileName" ]
