@@ -12,7 +12,24 @@ done
 #Create new directory with name, CommitNum
 mkdir .pig/commits/"$CommitNum"
 
-#check if files to be commited have been changed.
+# -a option enabled
+if [ "$#" -eq 3 ]
+then
+    for file in .pig/tmpIndex/*
+    do
+        FileName="$(echo "$file" | cut -d'/' -f3)"
+        for CurrFile in *
+        do
+            if [ "$CurrFile" = "$FileName" ]
+            then
+                cp "$CurrFile" .pig/tmpIndex/
+            fi
+        done
+    done
+fi
+
+
+#check if files to be commited have been changed compared to previous commits.
 for file in .pig/tmpIndex/*
 do
     commitdif.sh "$file"
