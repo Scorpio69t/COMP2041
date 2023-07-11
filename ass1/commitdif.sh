@@ -2,7 +2,6 @@
 
 #This script, given a file as an arguement, will go through all comits
 #and see if the file hhas been changed.
-
 ArgCutName="$(echo $1 | cut -d'/' -f3)"
 #Loop through all commits
 for dir in .pig/commits/*

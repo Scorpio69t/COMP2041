@@ -9,20 +9,18 @@ do
     fi
 done
 
-#Create new directory with name, CommitNum
-mkdir .pig/commits/"$CommitNum"
 
 # -a option enabled
 if [ "$#" -eq 3 ]
 then
-    for file in .pig/tmpIndex/*
+    for file in .pig/index/*
     do
         FileName="$(echo "$file" | cut -d'/' -f3)"
         for CurrFile in *
         do
             if [ "$CurrFile" = "$FileName" ]
             then
-                cp "$CurrFile" .pig/tmpIndex/
+                cp "$CurrFile" .pig/index/
             fi
         done
     done
@@ -30,17 +28,32 @@ fi
 
 
 #check if files to be commited have been changed compared to previous commits.
-for file in .pig/tmpIndex/*
-do
-    commitdif.sh "$file"
-    if [ $? -eq 1 ] 
+if [ "$#" -eq 2 ]
+then
+    if ! ls -A1q .pig/tmpIndex | grep -q .
     then
         echo "nothing to commit" 1>&2
-        rm -r .pig/commits/"$CommitNum"
         exit 1
     fi
-    mv "$file" .pig/index
+fi
+
+for file in .pig/tmpIndex/*
+do
+    if ls -A1q .pig/tmpIndex | grep -q .
+    then
+        commitdif.sh "$file"
+        if [ $? -eq 1 ] 
+        then
+            echo "nothing to commit" 1>&2
+            exit 1
+        fi
+            mv "$file" .pig/index 
+    fi
 done
+
+
+#Create new directory with name, CommitNum
+mkdir .pig/commits/"$CommitNum"
 
 #copies files from index to new dir
 for file in .pig/index/*

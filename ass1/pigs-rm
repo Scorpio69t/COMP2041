@@ -1,0 +1,123 @@
+#!/bin/dash
+#error checking
+
+if [ "$#" -eq 1 ]
+then
+    if [ "$1" = "--force" ] 
+    then
+        echo "usage: pigs-rm [--force] [--cached] <filenames>" 1>&2
+        exit 1  
+    fi
+    if [ "$1" = "--cached" ] 
+    then
+        echo "usage: pigs-rm [--force] [--cached] <filenames>" 1>&2
+        exit 1  
+    fi
+    if checkInIndex.sh $1
+    then
+        echo "$0: error: '$1' is not in the pigs repository" 1>&2
+        exit 1
+    fi
+fi
+
+if [ "$#" -eq 2 ]
+then
+    if [ "$1" = "--cached" ] 
+    then
+        if checkInIndex $2
+        then
+            echo "$0: error: '$2' is not in the pigs repository" 1>&2
+            exit 1
+        fi
+    fi 
+    if [ "$1" = "--force" ] 
+    then
+        if checkInIndex.sh $2
+        then
+            echo $?
+            echo "$0: error: '$2' is not in the pigs repository" 1>&2
+            exit 1
+        fi
+    fi
+fi
+
+if [ "$#" -ge 3 ] 
+then
+    for file in "$@"
+    do
+        if [ "$file" = "--force" ] 
+        then
+            continue
+        fi
+        if [ "$file" = "--cached" ]
+        then
+            continue
+        fi
+        if checkInIndex.sh $file
+        then
+            echo "$0: error: '$file' is not in the pigs repository" 1>&2
+            exit 1
+        fi
+    done
+fi
+
+FORCE=0
+CACHED=0
+#check which flags are on
+for args in "$@"
+do
+    if [ "$args" = "--force" ]
+    then
+        FORCE=1
+    fi
+    if [ "$args" = "--cached" ]
+    then
+        CACHED=1
+    fi
+done
+
+#if force flag is applied and not cahced
+if [ $FORCE -eq 1 ]
+then
+    if [ $CACHED -eq 0 ]
+    then
+        for i in "$@"
+        do
+            if [ $i = "--force" ]
+            then
+                continue
+            fi 
+            rm ".pig/index/${i}" 2>/dev/null
+            rm ".pig/tmpIndex/${i}" 2>/dev/null
+            rm "./${i}"
+        done
+    fi
+    exit 0
+fi
+
+#if cache flag is applied
+if [ $CACHED -eq 1 ]
+then
+    for i in "$@"
+    do
+        if [ $i = "--cached" ]
+        then    
+            continue
+        fi
+        rm ".pig/index/${i}"  2>/dev/null
+        rm ".pig/tmpIndex/${i}" 2>/dev/null
+    done
+    exit 0
+fi
+
+#None of the flags are present
+for i in "$@"
+do
+    if checkinCommits.sh $i
+    then
+        echo "'$0': error: '$i' has staged changes in the index"
+    else
+        rm "./${i}"
+    fi
+done
+exit 0

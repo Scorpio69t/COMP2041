@@ -1,5 +1,11 @@
 #!/bin/dash
 
+if  [ -z "$(ls -A .pig/commits)" ]
+then
+    exit 0
+fi
+
+
 for dir in .pig/commits/*
 do
     CommitNum="$(echo $dir | cut -d'/' -f3)"
