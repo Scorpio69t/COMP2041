@@ -8,4 +8,4 @@ for line in sys.stdin:
     m = [x.lower() for x in m]
     sum += m.count(sys.argv[1])
 
-print(sum)
+print(f"{sys.argv[1]} occured {sum} times")
