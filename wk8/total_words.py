@@ -7,4 +7,4 @@ for line in sys.stdin:
     m = list(filter(None, m))
     sum += len(m)
 
-print(sum)
+print(f"{sum} words")
