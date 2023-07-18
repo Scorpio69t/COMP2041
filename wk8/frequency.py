@@ -10,7 +10,7 @@ for file in sorted(glob.glob("lyrics/*.txt")):
         for line in lyricFile:
                 m = re.split('[^a-zA-Z]', line)
                 m = list(filter(None, m))
-                m = [x.lower() for x in m]
+                m = [x.lower() for x in m]                  #m is now list of words in each line 
                 wordSum += m.count(sys.argv[1])
                 totalSum += len(m)
     print(f"{wordSum:4}/{totalSum:6} = {wordSum/totalSum:.9f} {fileName}")
