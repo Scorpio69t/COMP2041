@@ -3,10 +3,20 @@
 import re, sys
 
 def shell_interpret(line):
+    #If line is an echo including variables
+    if m := re.search("^echo", line):
+        print('asdfwer')
+        string = re.sub("\$(\w+)", "{\1}", line)
+        print(string)
+
+    #if line is an echo
     if m := re.search("^echo\s+(.*)$", line):
         print("print(\"", end="")
         print(" ".join(m.group(1).split()), end="")
         print("\")")
+    #If line is a variable
+    if m:= re.search("(\w+)=(.*)", line):
+        print(f"{m.group(1)} = \"{m.group(2)}\"")
 
 def main():
     shell = []
