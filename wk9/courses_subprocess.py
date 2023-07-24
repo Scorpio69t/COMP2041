@@ -16,7 +16,7 @@ webpage = webpage.splitlines()
 for line in webpage:
     # print(line, end="")
     if m := re.search(f"{sys.argv[1]}", line):
-        if l := re.search("<td class=\"data\"><a href=(.*)>([a-zA-z\s+]+.*)</a></td>$", line):
+        if l := re.search("<td class=\"data\"><a href=(.*)>(.*[a-zA-z\s+]+.*)</a></td>$", line):
             # print(line.lstrip())
             code = l.group(1)[1:9]
             name = l.group(2)
