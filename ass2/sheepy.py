@@ -7,14 +7,16 @@ This function below changes all variables in shell script to python variables
 def variable_replace(line):
     if string := re.sub(r"\$(\w+)", r"{\1}", line):
         return string
-#functino splits line if comment. 
+
+#function splits line if it has a comment. 
 def comment_split(line):
-    line.split('#')
+    return line.split('#')
+
 #MAKE THIS A FUNCTION THAT CHANGES ECHO TO PRINT. NOTHING ELSE GIT
 def shell_interpret(line):
     #If line is an echo including variables
     #if line is an echo
-    if m := re.search("^echo\s+(.*)$", line):
+    if m := re.search("^echo\s+(.*)$", str(line)):
         print(m.group(1))
         line = line.replace("echo ", f"print(f\"{' '.join(m.group(1).split())}\")")
         print(line)
@@ -43,6 +45,7 @@ def main():
     with open(sys.argv[1]) as f:
         for line in f:
             line = variable_replace(line)
+            line = comment_split(line)
             shell_interpret(line)
 
 
