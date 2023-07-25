@@ -10,7 +10,7 @@ def variable_replace(line):
 #functino splits line if comment. 
 def comment_split(line):
     line.split('#')
-#MAKE THIS A FUNCTION THAT CHANGES ECHO TO PRINT. NOTHING ELSE 
+#MAKE THIS A FUNCTION THAT CHANGES ECHO TO PRINT. NOTHING ELSE GIT
 def shell_interpret(line):
     #If line is an echo including variables
     #if line is an echo
