@@ -64,7 +64,8 @@ def main():
     #########
 
     print("#!/usr/bin/python3 -u\n")
-    print(f"import {', '.join(to_import)}")
+    if len(to_import) != 0:
+        print(f"import {', '.join(to_import)}")
     with open(sys.argv[1]) as f:
         next(f)
         for line in f:
