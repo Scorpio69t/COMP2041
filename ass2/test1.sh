@@ -14,7 +14,9 @@
 #     echo $file
 # done
 
-for word in this is a string
+for word in Houston 1202 alarm
 do
     echo $word
+    exit 0
+    # *.c
 done

@@ -1,5 +1,6 @@
 #!/usr/bin/python3 -u
 
+import sys
 
 
 # for i in 1 2 3
@@ -30,6 +31,11 @@
 
 
 
-for word in ['this', 'is', 'a', 'string']:
+for word in ['Houston', '1202', 'alarm']:
 
-	print(f"{word}")
+    print(f"{word}")
+
+    sys.exit(0)
+
+     # *.c
+

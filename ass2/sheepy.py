@@ -2,6 +2,14 @@
 
 import re, sys
 
+################################################################################################################################################################
+#        
+#
+#                       INDENTING MAY BE AN ISSUE: TUT RECOMMENED HAVING A VARIABLE TO KEEP TRACK OF INDENT.
+#                       HOWEVER, IT ALSO WORKS IF I ONLY REPLACE KEYWORDS, AND HENCE KEEP THE INDENT FROM THE SHELL SCRIPT.
+#
+#
+################################################################################################################################################################
 # This function below changes all variables in shell script to python variables
 
 def variable_replace(line):
@@ -16,7 +24,8 @@ def comment_split(line):
 def echo_expand(line):
     #if line is an echo, print it
     if m := re.search("echo\s+(.*)$", line):
-        line = line.replace(line, f"print(f\"{' '.join(m.group(1).split())}\")")
+        line = re.sub("echo\s+(.*)$", f"print(f\"{' '.join(m.group(1).split())}\")", line)
+        # line = line.replace(line, f"print(f\"{' '.join(m.group(1).split())}\")")
     return line
 
 def variable_assignment(line):
@@ -42,7 +51,7 @@ def for_expand(line):
         if re.search("glob.glob", m.group(2)):                               # If for loop contains glob, change glob so it is loopable.
             line = re.sub("' '.join\((.*)\)", r"\1:", line)
         else:
-            line = re.sub("in (.*)$", rf"in {m.group(2).split()}:", line)
+            line = re.sub("in (.*)$", f"in {m.group(2).split()}:", line)
     return line
 
 def indent_counter(line, indent):
@@ -83,6 +92,7 @@ def main():
     with open(sys.argv[1]) as f:
         next(f)                                         #Skips first line to avoid #!/bin/dash
         for line in f:
+            
             comment = None                              #Set comment to none for each line, so that comment does not carry on to next line.
             if re.search("#", line):
                 if re.search("^\s?#", line):
@@ -90,20 +100,17 @@ def main():
                     continue
                 comment = comment_split(line)[1]        #If comment exists, comment becomes the comment string.
             line = comment_split(line)[0]               #At this point, line does not include the comment
-
-
             indent = indent_counter(line, indent)       # Get the number of indentends needed.
             if re.search("^do$", line):
                 continue
             if re.search("^done$", line):               # if the line is a keywords ('do','done'), skip the line since we won't need to print it
                 continue
-
-            i = 0
-            while (i < indent):
-                print("\t", end="")                     #print the indents
-                i += 1
-
-            line = sys_exit(line)
+            # print(f"The indent in this line is {indent}")
+            # i = 0
+            # while (i < indent):
+            #     print("\t", end="")                     #print the indents
+            #     i += 1
+            line = sys_exit(line)                         # converts exit into sys.exit
 
             line = glob_expand(line)                    #All glob characters are expanded
 
