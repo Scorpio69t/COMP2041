@@ -36,7 +36,7 @@ def variable_assignment(line):
 def echo_glob(line):
     if m:= re.sub("(echo.*)(' '.join.*)", r"\1{\2}", line):
         return m
-
+# Expands exit statements. Eg exit 0 -> sys.exit(0)
 def sys_exit(line):
     if m:= re.sub(r"exit ?(\d)?", r"sys.exit(\1)", line):
         return m
@@ -46,6 +46,7 @@ def glob_expand(line):
     if m:= re.sub(r"([\*\?\[\]].*[\*\?\.\[\]]?)", r"' '.join(sorted(glob.glob('\1')))", line):
         return m
 
+#expands for statements
 def for_expand(line):
     if m := re.search("^for (.*) in (.*)$", line):
         if re.search("glob.glob", m.group(2)):                               # If for loop contains glob, change glob so it is loopable.
@@ -53,6 +54,19 @@ def for_expand(line):
         else:
             line = re.sub("in (.*)$", f"in {m.group(2).split()}:", line)
     return line
+
+# Expands cd statements. If no argumeents, changes dir into home dir
+def cd_expand(line):
+    if m := re.search("cd(.*)", line):
+        if not m.group(1):
+            line = re.sub("cd(.*)", "os.chdir(os.path.expanduser('~'))", line)
+        else:
+            line = re.sub("cd (.*)", r"os.chdir('\1')", line)
+    return line
+
+def read_expand(line):
+    if m := re.sub("read (.*)", r"\1 = input()", line):
+        return m
 
 def indent_counter(line, indent):
     if re.search("^do$", line):
@@ -68,7 +82,7 @@ def dict_key_from_value(d, v):
 
 def main():
     shell = []
-    imports = {'glob' : ['?', '*', '[', ']'], 'sys' : ['exit']} 
+    imports = {'glob' : ['?', '*', '[', ']'], 'sys' : ['exit'], 'os' : ['cd']} 
     to_import = set()
     with open(sys.argv[1]) as f:
         for line in f:
@@ -112,12 +126,16 @@ def main():
             #     i += 1
             line = sys_exit(line)                         # converts exit into sys.exit
 
+            line = cd_expand(line)
+
+            line = read_expand(line)
+
             line = glob_expand(line)                    #All glob characters are expanded
 
             if not re.search("glob", line):
                 line = variable_assignment(line)            # variables are assigned, only if line does not contain a glob. Eg a=5 is now a = '5'
 
-            line = for_expand(line)
+            line = for_expand(line)                     # expands for - in statements
 
             line = variable_replace(line)               # all variables are replaced. eg: $a is now {a}
         
