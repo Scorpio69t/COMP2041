@@ -1,9 +1,20 @@
 #!/bin/dash
 
-echo hello world # This is also a comment
-echo *
+# for i in 1 2 3
+# do
+#     echo $i
+# done
 
-C_files=*.[ch]
-echo $C_files
+# echo hello world # This is also a comment
+# echo *
 
-echo all of the single letter Python files are: ?.py
+
+# for file in *.c
+# do
+#     echo $file
+# done
+
+for word in this is a string
+do
+    echo $word
+done

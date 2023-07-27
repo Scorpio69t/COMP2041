@@ -1,16 +1,35 @@
 #!/usr/bin/python3 -u
 
-import glob
 
 
-print(f"hello world") # This is also a comment
+# for i in 1 2 3
 
-print(f"{' '.join(sorted(glob.glob('*')))}")
+# do
+
+#     echo $i
+
+# done
 
 
-C_files=' '.join(sorted(glob.glob('*.[ch]')))
 
-print(f"{C_files}")
+# echo hello world # This is also a comment
+
+# echo *
 
 
-print(f"all of the single letter Python files are: {' '.join(sorted(glob.glob('?.py')))}")
+
+
+
+# for file in *.c
+
+# do
+
+#     echo $file
+
+# done
+
+
+
+for word in ['this', 'is', 'a', 'string']:
+
+	print(f"{word}")
