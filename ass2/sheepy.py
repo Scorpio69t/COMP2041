@@ -82,7 +82,7 @@ def dict_key_from_value(d, v):
 
 def main():
     shell = []
-    imports = {'glob' : ['?', '*', '[', ']'], 'sys' : ['exit'], 'os' : ['cd']} 
+    imports = {'glob' : ['?', '*', '[', ']'], 'sys' : ['exit'], 'os' : ['cd'], 'subprocess' : ['touch', 'pwd', 'ls', 'id', 'date']} 
     to_import = set()
     with open(sys.argv[1]) as f:
         for line in f:
