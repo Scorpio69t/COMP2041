@@ -166,6 +166,8 @@ def clean_dna(dna):
 def mast_common_base(dna):
     count = {'A': 0, 'T': 0, 'U': 0, 'C': 0, 'G': 0}
     for (pair1,pair2) in dna:
+        if not pair1:
+            continue
         count[pair1] += 1
 
     return max(count, key=count.get)
