@@ -13,7 +13,7 @@ import re, sys
 # This function below changes all variables in shell script to python variables
 
 def variable_replace(line):
-    if string := re.sub(r"\$(\w+)", r"{\1}", line):
+    if string := re.sub(r"\$([a-zA-Z_-]+)", r"{\1}", line):
         return string
     
 #function splits line if it has a comment. 
@@ -30,7 +30,7 @@ def echo_expand(line):
 
 def variable_assignment(line):
     #If line is a variable
-    if m:= re.sub(r"(\w+)=(.*)", r'\1 = "\2"', line):
+    if m:= re.sub(r"(\w+)=(.*)", r'\1 = f"\2"', line):
         return m
 #function replaces glob adds {} around it if it starts with echo
 def echo_glob(line):
@@ -68,6 +68,22 @@ def read_expand(line):
     if m := re.sub("read (.*)", r"\1 = input()", line):
         return m
 
+def External_command_expand(line): 
+    subprocess = ['touch', 'pwd', 'ls', 'id', 'date', 'chmod','mkdir']
+    retList = []
+    if m:= re.search("^(\s*)(\w+).*", line):
+        if m.group(2) in subprocess:
+            command = line.split()
+            for word in command:
+                word = word.replace(word, f'f"{word}"')
+                retList.append(word)
+            line = line.replace(line, f"{m.group(1)}subprocess.run([{', '.join(retList)}])")
+    return line
+
+def command_line_expand(line):
+    if m := re.sub("\$(\d)", r"{sys.argv[\1]}", line):
+        return m
+
 def indent_counter(line, indent):
     if re.search("^do$", line):
         indent += 1
@@ -82,12 +98,15 @@ def dict_key_from_value(d, v):
 
 def main():
     shell = []
-    imports = {'glob' : ['?', '*', '[', ']'], 'sys' : ['exit'], 'os' : ['cd'], 'subprocess' : ['touch', 'pwd', 'ls', 'id', 'date']} 
+    imports = {'glob' : ['?', '*', '[', ']'], 'sys' : ['exit'], 'os' : ['cd'],
+                'subprocess' : ['touch', 'pwd', 'ls', 'id', 'date', 'chmod','mkdir']} 
     to_import = set()
     with open(sys.argv[1]) as f:
         for line in f:
             line = comment_split(line)[0]
             shell.append(line)
+            if re.search("\$\d", line):
+                to_import.add('sys')
 
     #Based on the shell list, if any keywords relating to an import exists, add that import to the to_import set
     for line in shell:
@@ -130,8 +149,10 @@ def main():
 
             line = read_expand(line)
 
+            
             line = glob_expand(line)                    #All glob characters are expanded
 
+            
             if not re.search("glob", line):
                 line = variable_assignment(line)            # variables are assigned, only if line does not contain a glob. Eg a=5 is now a = '5'
 
@@ -139,9 +160,15 @@ def main():
 
             line = variable_replace(line)               # all variables are replaced. eg: $a is now {a}
         
+            line = command_line_expand(line)
+            
             line = echo_glob(line)                      #echo statements that have glob, adds {} around glob so it can be printed.
         
             line = echo_expand(line)                    #Echo lines are replaced with print stateemnts w fstrings
+
+            
+            line = External_command_expand(line)
+        
             print(line, end="")                 #Print the final line 
             if (line == ""):
                 continue 
