@@ -122,34 +122,43 @@ def clean_dna(dna):
 
     for (pair1, pair2) in dna:
         if not pair1:
+            if not pair2:
+                continue
+        
+        if not pair1:
             if pair2 == 'G':
                 pair1 = 'C'
-            if pair2 == 'C':
+            elif pair2 == 'C':
                 pair1 = 'G'
-            if pair2 == 'T':
+            elif pair2 == 'T':
                 pair1 == 'A'
-            if pair2 == 'U':
+            elif pair2 == 'U':
                 pair1 == 'A'
-            if pair2 == 'A':
+            elif pair2 == 'A':
                 if is_DNA:
                     pair1 = 'T'
                 else:
                     pair1 = 'U'
+            else:
+                continue
         if not pair2:
             if pair1 == 'G':
                 pair2 = 'C'
-            if pair1 == 'C':
+            elif pair1 == 'C':
                 pair2 = 'G'
-            if pair1 == 'T':
+            elif pair1 == 'T':
                 pair2 == 'A'
-            if pair1 == 'U':
+            elif pair1 == 'U':
                 pair2 == 'A'
-            if pair1 == 'A':
+            elif pair1 == 'A':
                 if is_DNA:
                     pair2 = 'T'
                 else:
                     pair2 = 'U' 
+            else:
+                continue
         resultDNA.append((pair1,pair2))
+    resultDNA = list(filter(None, resultDNA))
     return resultDNA
     
     """
