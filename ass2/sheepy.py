@@ -30,7 +30,7 @@ def echo_expand(line):
 
 def variable_assignment(line):
     #If line is a variable
-    if m:= re.sub(r"(\w+)=(.*)", r'\1 = \2', line):
+    if m:= re.sub(r"(\w+)=(.*)", r'\1 = "\2"', line):  
         return m
 #function replaces glob adds {} around it if it starts with echo
 def echo_glob(line):
@@ -81,8 +81,11 @@ def External_command_expand(line):
     return line
 
 def command_line_expand(line):
-    if m := re.sub("\$(\d)", r'{sys.argv[\1]}', line):
-        return m
+    if line := re.sub("\$(\d)", r'{sys.argv[\1]}', line):
+        if m := re.sub("= ", "= f", line):
+            return m
+        else:
+            return line
 
 def indent_counter(line, indent):
     if re.search("^do$", line):

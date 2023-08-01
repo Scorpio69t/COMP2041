@@ -1,5 +1,5 @@
 #!/bin/dash
-name="Mathu"
+name=Mathu
 echo Hello $name
 # # ls -l test_file.txt
 
