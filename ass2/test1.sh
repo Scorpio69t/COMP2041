@@ -1,4 +1,8 @@
 #!/bin/dash
+name="Mathu"
+echo Hello $name
+# # ls -l test_file.txt
+
 
 touch test_file.txt
 ls -l test_file.txt
@@ -8,8 +12,7 @@ do                                                # keyword
     echo $course                                  # builtin
     mkdir $course                                 # external command
     chmod 700 $course                             # external command
-done                      
-
+done    
 
 echo This program is: $0
 

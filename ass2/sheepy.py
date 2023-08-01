@@ -13,7 +13,7 @@ import re, sys
 # This function below changes all variables in shell script to python variables
 
 def variable_replace(line):
-    if string := re.sub(r"\$([a-zA-Z_-]+)", r"{\1}", line):
+    if string := re.sub(r"\$([a-zA-Z_-]+)", r'{\1}', line):
         return string
     
 #function splits line if it has a comment. 
@@ -24,13 +24,13 @@ def comment_split(line):
 def echo_expand(line):
     #if line is an echo, print it
     if m := re.search("echo\s+(.*)$", line):
-        line = re.sub("echo\s+(.*)$", f"print(f\"{' '.join(m.group(1).split())}\")", line)
+        line = re.sub("echo\s+(.*)$", f'print(f\"{" ".join(m.group(1).split())}\")', line)
         # line = line.replace(line, f"print(f\"{' '.join(m.group(1).split())}\")")
     return line
 
 def variable_assignment(line):
     #If line is a variable
-    if m:= re.sub(r"(\w+)=(.*)", r'\1 = f"\2"', line):
+    if m:= re.sub(r"(\w+)=(.*)", r'\1 = \2', line):
         return m
 #function replaces glob adds {} around it if it starts with echo
 def echo_glob(line):
@@ -81,7 +81,7 @@ def External_command_expand(line):
     return line
 
 def command_line_expand(line):
-    if m := re.sub("\$(\d)", r"{sys.argv[\1]}", line):
+    if m := re.sub("\$(\d)", r'{sys.argv[\1]}', line):
         return m
 
 def indent_counter(line, indent):
@@ -134,9 +134,9 @@ def main():
                 comment = comment_split(line)[1]        #If comment exists, comment becomes the comment string.
             line = comment_split(line)[0]               #At this point, line does not include the comment
             indent = indent_counter(line, indent)       # Get the number of indentends needed.
-            if re.search("^do$", line):
+            if re.search("^do", line):
                 continue
-            if re.search("^done$", line):               # if the line is a keywords ('do','done'), skip the line since we won't need to print it
+            if re.search("^done", line):               # if the line is a keywords ('do','done'), skip the line since we won't need to print it
                 continue
             # print(f"The indent in this line is {indent}")
             # i = 0
@@ -152,9 +152,11 @@ def main():
             
             line = glob_expand(line)                    #All glob characters are expanded
 
-            
+            # print(f"line before variable assignement: {line}")
             if not re.search("glob", line):
                 line = variable_assignment(line)            # variables are assigned, only if line does not contain a glob. Eg a=5 is now a = '5'
+
+            # print(f"line after variable assignement: {line}")
 
             line = for_expand(line)                     # expands for - in statements
 
