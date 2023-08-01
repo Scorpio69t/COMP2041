@@ -82,7 +82,7 @@ def External_command_expand(line):
 
 def command_line_expand(line):
     if line := re.sub("\$(\d)", r'{sys.argv[\1]}', line):
-        if m := re.sub("= ", "= f", line):
+        if m := re.sub("=(.*)", r'= f"\1"', line):
             return m
         else:
             return line
@@ -154,9 +154,14 @@ def main():
 
             
             line = glob_expand(line)                    #All glob characters are expanded
+            
+            if re.search("\$\d", line):
+                # print('asdfhg')
+                line = command_line_expand(line)
+
 
             # print(f"line before variable assignement: {line}")
-            if not re.search("glob", line):
+            if not re.search("glob", line) and not re.search("sys\.argv", line):
                 line = variable_assignment(line)            # variables are assigned, only if line does not contain a glob. Eg a=5 is now a = '5'
 
             # print(f"line after variable assignement: {line}")
@@ -165,7 +170,6 @@ def main():
 
             line = variable_replace(line)               # all variables are replaced. eg: $a is now {a}
         
-            line = command_line_expand(line)
             
             line = echo_glob(line)                      #echo statements that have glob, adds {} around glob so it can be printed.
         
