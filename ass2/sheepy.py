@@ -146,11 +146,13 @@ def main():
             # while (i < indent):
             #     print("\t", end="")                     #print the indents
             #     i += 1
-            line = sys_exit(line)                         # converts exit into sys.exit
+            if not re.search("echo", line):
+                line = sys_exit(line)                         # converts exit into sys.exit
+                line = cd_expand(line)
 
-            line = cd_expand(line)
 
-            line = read_expand(line)
+            if not re.search("echo", line):
+                line = read_expand(line)
 
             
             line = glob_expand(line)                    #All glob characters are expanded
