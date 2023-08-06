@@ -1,7 +1,7 @@
 #!/bin/dash
-# Test 4 sees how echo interacts with keywords such as do and done
-# Python does not use do and done, so they should be printed out
+# Test 5 sees how cd works with echo
+# SHeepy should output:
+# print("cd tmp") and not 
+# os.chdir("tmp)")
 #
-#
-echo do 
-echo done
+echo cd tmp

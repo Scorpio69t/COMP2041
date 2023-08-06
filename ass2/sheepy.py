@@ -69,7 +69,7 @@ def read_expand(line):
         return m
 
 def External_command_expand(line): 
-    subprocess = ['touch', 'pwd', 'ls', 'id', 'date', 'chmod','mkdir']
+    subprocess = ['touch', 'pwd', 'ls', 'id', 'date', 'chmod','mkdir', 'cat', 'head', 'tail']
     retList = []
     if m:= re.search("^(\s*)(\w+).*", line):
         if m.group(2) in subprocess:
@@ -102,7 +102,7 @@ def dict_key_from_value(d, v):
 def main():
     shell = []
     imports = {'glob' : ['?', '*', '[', ']'], 'sys' : ['exit'], 'os' : ['cd'],
-                'subprocess' : ['touch', 'pwd', 'ls', 'id', 'date', 'chmod','mkdir']} 
+                'subprocess' : ['touch', 'pwd', 'ls', 'id', 'date', 'chmod','mkdir', 'cat', 'head', 'tail']} 
     to_import = set()
     with open(sys.argv[1]) as f:
         for line in f:
@@ -141,32 +141,24 @@ def main():
                 continue
             if re.search("^done", line):               # if the line is a keywords ('do','done'), skip the line since we won't need to print it
                 continue
-            # print(f"The indent in this line is {indent}")
-            # i = 0
-            # while (i < indent):
-            #     print("\t", end="")                     #print the indents
-            #     i += 1
+            
             if not re.search("echo", line):
                 line = sys_exit(line)                         # converts exit into sys.exit
                 line = cd_expand(line)
+                line = glob_expand(line)                    #All glob characters are expanded
 
 
             if not re.search("echo", line):
                 line = read_expand(line)
 
             
-            line = glob_expand(line)                    #All glob characters are expanded
-            
             if re.search("\$\d", line):
                 # print('asdfhg')
                 line = command_line_expand(line)
 
 
-            # print(f"line before variable assignement: {line}")
             if not re.search("glob", line) and not re.search("sys\.argv", line):
                 line = variable_assignment(line)            # variables are assigned, only if line does not contain a glob. Eg a=5 is now a = '5'
-
-            # print(f"line after variable assignement: {line}")
 
             line = for_expand(line)                     # expands for - in statements
 

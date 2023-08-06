@@ -1,7 +1,7 @@
 #!/bin/dash
-# Test to see how echo works with comment
-# Only "Comment should not get printed" shoudl get printed
-# and the comment should remain
+# Test 4 sees how echo interacts with keywords such as do and done
+# Python does not use do and done, so they should be printed out
 #
-echo Comment should not get printed #BUt this is a comment!!
-
+#
+echo do 
+echo done
